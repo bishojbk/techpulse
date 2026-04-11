@@ -8,16 +8,15 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .manage(Mutex::new(FeedCache::new()))
-        .setup(|app| {
-            if cfg!(debug_assertions) {
-                app.handle().plugin(
-                    tauri_plugin_log::Builder::default()
-                        .level(log::LevelFilter::Info)
-                        .build(),
-                )?;
-            }
-            Ok(())
-        })
+        .plugin(
+            tauri_plugin_log::Builder::default()
+                .level(if cfg!(debug_assertions) {
+                    log::LevelFilter::Debug
+                } else {
+                    log::LevelFilter::Info
+                })
+                .build(),
+        )
         .invoke_handler(tauri::generate_handler![feeds::fetch_all_feeds])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

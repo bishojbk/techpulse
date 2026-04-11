@@ -11,7 +11,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
     <ArticlesProvider>
       <Header />
       <CategoryBar />
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6">
         {children}
       </main>
       <Footer />

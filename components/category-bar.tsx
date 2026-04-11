@@ -14,31 +14,31 @@ export function CategoryBar() {
   };
 
   return (
-    <div className="sticky top-14 z-40 border-b border-border bg-background/80 backdrop-blur-md">
+    <div className="sticky top-0 z-40 border-b border-border bg-background">
       <nav
-        className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 py-2 scrollbar-none"
+        className="mx-auto flex max-w-7xl items-center gap-0 overflow-x-auto px-4 sm:px-6 scrollbar-none"
         aria-label="Category filter"
       >
         <Link
           href="/"
           className={cn(
-            "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200",
+            "relative shrink-0 px-4 py-3 text-[13px] font-semibold transition-colors",
             isActive(null)
-              ? "bg-foreground text-background"
-              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              ? "text-primary after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-primary"
+              : "text-muted-foreground hover:text-foreground"
           )}
         >
-          All
+          Home
         </Link>
         {CATEGORIES.map((cat) => (
           <Link
             key={cat.slug}
             href={`/category/${cat.slug}`}
             className={cn(
-              "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200",
+              "relative shrink-0 px-4 py-3 text-[13px] font-semibold transition-colors",
               isActive(cat.slug)
-                ? "bg-foreground text-background"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                ? "text-primary after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-primary"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
             {cat.label}

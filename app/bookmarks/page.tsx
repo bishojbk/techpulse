@@ -1,10 +1,8 @@
 "use client";
 
 import { useBookmarks } from "@/hooks/use-bookmarks";
-import { ArticleGrid } from "@/components/article-grid";
-import { PageHeading } from "@/components/page-heading";
+import { ArticleListItem } from "@/components/article-list-item";
 import { EmptyState } from "@/components/empty-state";
-import { Button } from "@/components/ui/button";
 
 export default function BookmarksPage() {
   const { bookmarks, clearAll, count } = useBookmarks();
@@ -12,25 +10,36 @@ export default function BookmarksPage() {
   if (count === 0) {
     return (
       <EmptyState
-        title="No bookmarks yet"
-        description="Articles you bookmark will appear here. Click the heart icon on any article to save it."
+        title="No saved articles"
+        description="Articles you bookmark will appear here. Click the bookmark icon on any article to save it."
         showBackLink
       />
     );
   }
 
   return (
-    <>
-      <div className="flex items-center justify-between pb-4">
-        <PageHeading
-          title="Bookmarks"
-          subtitle={`${count} saved article${count === 1 ? "" : "s"}`}
-        />
-        <Button variant="outline" size="sm" onClick={clearAll}>
+    <div className="py-8">
+      <div className="flex items-start justify-between border-b border-border pb-6">
+        <div>
+          <div className="section-divider mb-3 w-16" />
+          <h1 className="text-3xl font-extrabold tracking-tight">Saved Articles</h1>
+          <p className="mt-1 text-[13px] text-muted-foreground">
+            {count} saved article{count === 1 ? "" : "s"}
+          </p>
+        </div>
+        <button
+          onClick={clearAll}
+          className="mt-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-destructive"
+        >
           Clear all
-        </Button>
+        </button>
       </div>
-      <ArticleGrid articles={bookmarks} showCategoryBadge={true} />
-    </>
+
+      <div>
+        {bookmarks.map((article, i) => (
+          <ArticleListItem key={article.id} article={article} index={i} />
+        ))}
+      </div>
+    </div>
   );
 }

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { fetchAllFeedsUncached } from "@/lib/feeds";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
+export const revalidate = 600;
 
 export async function GET() {
   try {

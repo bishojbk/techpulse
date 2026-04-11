@@ -3,9 +3,12 @@ use regex::Regex;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
-use std::sync::Mutex;
+use std::sync::{LazyLock, Mutex};
 use std::time::{Duration, Instant};
 use tauri::State;
+
+static TAG_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<[^>]*>").unwrap());
+static WS_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\s+").unwrap());
 
 // ─── Article type (matches frontend) ───────────────────────────────────────
 
@@ -76,8 +79,7 @@ const REDDIT_SOURCES: &[RssSource] = &[
 // ─── HTML stripping ───────────────────────────────────────────────────────
 
 fn strip_html(html: &str) -> String {
-    let tag_re = Regex::new(r"<[^>]*>").unwrap();
-    let result = tag_re.replace_all(html, "");
+    let result = TAG_RE.replace_all(html, "");
     let result = result
         .replace("&nbsp;", " ")
         .replace("&amp;", "&")
@@ -86,15 +88,20 @@ fn strip_html(html: &str) -> String {
         .replace("&quot;", "\"")
         .replace("&#39;", "'")
         .replace("&apos;", "'");
-    let ws_re = Regex::new(r"\s+").unwrap();
-    ws_re.replace_all(&result, " ").trim().to_string()
+    WS_RE.replace_all(&result, " ").trim().to_string()
 }
 
 fn truncate(text: &str, max_len: usize) -> String {
-    if text.len() <= max_len {
+    if text.chars().count() <= max_len {
         return text.to_string();
     }
-    let truncated = &text[..max_len];
+    // Safe UTF-8 slicing via char_indices
+    let byte_end = text
+        .char_indices()
+        .nth(max_len)
+        .map(|(i, _)| i)
+        .unwrap_or(text.len());
+    let truncated = &text[..byte_end];
     if let Some(pos) = truncated.rfind(' ') {
         format!("{}…", &truncated[..pos])
     } else {
