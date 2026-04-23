@@ -5,8 +5,9 @@ export function generateStaticParams() {
   return CATEGORIES.map((c) => ({ slug: c.slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const cat = CATEGORIES.find((c) => c.slug === params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const cat = CATEGORIES.find((c) => c.slug === slug);
   if (!cat) return {};
   return {
     title: `${cat.label} — TechPulse`,
