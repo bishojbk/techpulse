@@ -36,6 +36,9 @@ export default function RootLayout({
         <Providers>
           <ClientShell>{children}</ClientShell>
         </Providers>
+        <footer style={{ textAlign: "center", padding: "16px", fontSize: "13px", opacity: 0.6 }}>
+          Made by <a href="https://github.com/bishojbk" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>EJR</a>
+        </footer>
       </body>
     </html>
   );
