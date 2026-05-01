@@ -1,20 +1,16 @@
 "use client";
 
-import { Header } from "@/components/header";
-import { CategoryBar } from "@/components/category-bar";
-import { Footer } from "@/components/footer";
+import { Sidebar } from "@/components/sidebar";
 import { BackToTop } from "@/components/back-to-top";
 import { ArticlesProvider } from "@/hooks/articles-context";
 
 export function ClientShell({ children }: { children: React.ReactNode }) {
   return (
     <ArticlesProvider>
-      <Header />
-      <CategoryBar />
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6">
-        {children}
-      </main>
-      <Footer />
+      <div className="lg:grid lg:min-h-screen lg:[grid-template-columns:248px_1fr]">
+        <Sidebar />
+        <main className="min-w-0">{children}</main>
+      </div>
       <BackToTop />
     </ArticlesProvider>
   );

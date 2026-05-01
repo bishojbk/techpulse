@@ -6,44 +6,38 @@ import { useBookmarks } from "@/hooks/use-bookmarks";
 
 export function BookmarkButton({ article }: { article: Article }) {
   const { isBookmarked, toggle } = useBookmarks();
-  const bookmarked = isBookmarked(article.id);
-  const [animating, setAnimating] = useState(false);
+  const saved = isBookmarked(article.id);
+  const [pop, setPop] = useState(false);
 
   return (
     <button
-      className="flex h-8 w-8 shrink-0 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+      className="btn icon"
+      style={{
+        color: saved ? "var(--accent)" : "var(--ink-3)",
+        background: "transparent",
+      }}
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
-        if (!bookmarked) {
-          setAnimating(true);
-          setTimeout(() => setAnimating(false), 300);
+        if (!saved) {
+          setPop(true);
+          setTimeout(() => setPop(false), 280);
         }
         toggle(article);
       }}
-      aria-label={bookmarked ? "Remove bookmark" : "Add bookmark"}
+      aria-label={saved ? "Remove bookmark" : "Add bookmark"}
     >
-      {bookmarked ? (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className={`h-4 w-4 text-primary ${animating ? "animate-pulse-heart" : ""}`}
-        >
-          <path fillRule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z" clipRule="evenodd" />
-        </svg>
-      ) : (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="h-4 w-4"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
-        </svg>
-      )}
+      <svg
+        viewBox="0 0 16 16"
+        fill={saved ? "currentColor" : "none"}
+        stroke="currentColor"
+        strokeWidth={1.5}
+        strokeLinejoin="round"
+        className={pop ? "animate-pulse-heart" : ""}
+        style={{ width: 13, height: 13 }}
+      >
+        <path d="M3.5 2h9v12l-4.5-3-4.5 3z" />
+      </svg>
     </button>
   );
 }

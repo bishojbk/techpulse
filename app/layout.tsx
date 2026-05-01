@@ -1,24 +1,93 @@
-import type { Metadata } from "next";
-import { DM_Sans, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import Script from "next/script";
+import { Fraunces, Geist, JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { ClientShell } from "@/components/client-shell";
+import { SITE } from "@/lib/site";
 import "./globals.css";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  axes: ["opsz", "SOFT"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "TechPulse — Tech News Aggregator",
-  description:
-    "Stay on top of the latest tech news from TechCrunch, Hacker News, The Verge, Ars Technica, and more.",
+  metadataBase: new URL(SITE.url),
+  title: {
+    default: `${SITE.name} — ${SITE.tagline}`,
+    template: `%s — ${SITE.name}`,
+  },
+  description: SITE.description,
+  applicationName: SITE.name,
+  authors: [{ name: "EJR" }],
+  generator: "Next.js",
+  keywords: [
+    "tech news",
+    "AI news",
+    "machine learning",
+    "Hacker News aggregator",
+    "RSS reader",
+    "TechCrunch",
+    "The Verge",
+    "Ars Technica",
+    "Hugging Face",
+    "MIT Tech Review",
+    "security news",
+    "daily tech digest",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    title: `${SITE.name} — ${SITE.tagline}`,
+    description: SITE.description,
+    url: SITE.url,
+    locale: SITE.locale,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.name} — ${SITE.tagline}`,
+    description: SITE.description,
+    creator: SITE.twitter,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
+  category: "technology",
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#1a1410" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f0e6" },
+  ],
+  colorScheme: "dark light",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -26,19 +95,37 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE.name,
+    alternateName: SITE.tagline,
+    url: SITE.url,
+    description: SITE.description,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      name: SITE.name,
+      url: SITE.url,
+    },
+  };
+
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${geist.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-background">
+      <body className="min-h-screen">
         <Providers>
           <ClientShell>{children}</ClientShell>
         </Providers>
-        <footer style={{ textAlign: "center", padding: "16px", fontSize: "13px", opacity: 0.6 }}>
-          Made by <a href="https://github.com/bishojbk" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>EJR</a>
-        </footer>
+        <Script
+          id="website-jsonld"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 import { Source } from "./types";
 
 export const RSS_SOURCES: Source[] = [
+  // ── General tech ──
   {
     name: "TechCrunch",
     feedUrl: "https://techcrunch.com/feed/",
@@ -26,12 +27,6 @@ export const RSS_SOURCES: Source[] = [
     color: "#000000",
   },
   {
-    name: "MIT Tech Review",
-    feedUrl: "https://www.technologyreview.com/feed/",
-    domain: "technologyreview.com",
-    color: "#a31d37",
-  },
-  {
     name: "VentureBeat",
     feedUrl: "https://venturebeat.com/feed/",
     domain: "venturebeat.com",
@@ -42,6 +37,73 @@ export const RSS_SOURCES: Source[] = [
     feedUrl: "https://www.engadget.com/rss.xml",
     domain: "engadget.com",
     color: "#4689e8",
+  },
+  {
+    name: "The Register",
+    feedUrl: "https://www.theregister.com/headlines.atom",
+    domain: "theregister.com",
+    color: "#ff0000",
+  },
+
+  // ── AI / ML focused ──
+  {
+    // Use the AI-only feed; the main MIT TR feed is a strict superset that
+    // would dedupe-collide with this one (same article URLs).
+    name: "MIT Tech Review · AI",
+    feedUrl:
+      "https://www.technologyreview.com/topic/artificial-intelligence/feed",
+    domain: "technologyreview.com",
+    color: "#a31d37",
+  },
+  {
+    name: "Hugging Face",
+    feedUrl: "https://huggingface.co/blog/feed.xml",
+    domain: "huggingface.co",
+    color: "#ffd21e",
+  },
+
+  // ── Security ──
+  {
+    name: "Krebs on Security",
+    feedUrl: "https://krebsonsecurity.com/feed/",
+    domain: "krebsonsecurity.com",
+    color: "#c41e3a",
+  },
+  {
+    name: "The Hacker News (security)",
+    feedUrl: "https://feeds.feedburner.com/TheHackersNews",
+    domain: "thehackernews.com",
+    color: "#0066cc",
+  },
+  {
+    name: "Bleeping Computer",
+    feedUrl: "https://www.bleepingcomputer.com/feed/",
+    domain: "bleepingcomputer.com",
+    color: "#1a1a1a",
+  },
+
+  // ── Hardware ──
+  {
+    name: "Tom's Hardware",
+    feedUrl: "https://www.tomshardware.com/feeds/all",
+    domain: "tomshardware.com",
+    color: "#ff6600",
+  },
+
+  // ── Science ──
+  {
+    name: "Quanta Magazine",
+    feedUrl: "https://www.quantamagazine.org/feed/",
+    domain: "quantamagazine.org",
+    color: "#0099cc",
+  },
+
+  // ── Programming ──
+  {
+    name: "Lobsters",
+    feedUrl: "https://lobste.rs/rss",
+    domain: "lobste.rs",
+    color: "#ac130d",
   },
 ];
 
@@ -64,42 +126,20 @@ export const REDDIT_SOURCES: Source[] = [
     domain: "reddit.com",
     color: "#ff4500",
   },
+  {
+    name: "r/MachineLearning",
+    feedUrl: "https://www.reddit.com/r/MachineLearning/.rss",
+    domain: "reddit.com",
+    color: "#ff4500",
+  },
+  {
+    name: "r/LocalLLaMA",
+    feedUrl: "https://www.reddit.com/r/LocalLLaMA/.rss",
+    domain: "reddit.com",
+    color: "#ff4500",
+  },
 ];
 
 export function getSourceIcon(domain: string): string {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-}
-
-// Branded gradient backgrounds for placeholder cards
-const SOURCE_GRADIENTS: Record<string, { from: string; to: string }> = {
-  TechCrunch: { from: "#0A9E01", to: "#064D00" },
-  Wired: { from: "#1a1a1a", to: "#333333" },
-  "Ars Technica": { from: "#FF4E00", to: "#8B2A00" },
-  VentureBeat: { from: "#003366", to: "#001a33" },
-  "The Verge": { from: "#6B2FA0", to: "#3A1A5C" },
-  Engadget: { from: "#0066CC", to: "#003366" },
-  "MIT Tech Review": { from: "#CC0000", to: "#660000" },
-  "r/technology": { from: "#FF4500", to: "#8B2500" },
-  "r/programming": { from: "#FF4500", to: "#8B2500" },
-  "r/artificial": { from: "#FF4500", to: "#8B2500" },
-  "Hacker News": { from: "#FF6600", to: "#993D00" },
-};
-
-const GRADIENT_DIRECTIONS = [
-  "to bottom right",
-  "to bottom left",
-  "to right",
-  "135deg",
-  "160deg",
-  "200deg",
-];
-
-export function getSourceGradient(source: string, index: number): string {
-  const g = SOURCE_GRADIENTS[source] ?? { from: "#2a2a2a", to: "#1a1a1a" };
-  const dir = GRADIENT_DIRECTIONS[index % GRADIENT_DIRECTIONS.length];
-  return `linear-gradient(${dir}, ${g.from}, ${g.to})`;
-}
-
-export function getUniqueSourceCount(sources: string[]): number {
-  return new Set(sources).size;
 }
